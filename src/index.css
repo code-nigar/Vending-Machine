@@ -11,3 +11,11 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.font-weight-bold{
+  font-weight: bold;
+}
+.font-weight-semibold{
+  font-weight: 600;
+  color: #555;
+}

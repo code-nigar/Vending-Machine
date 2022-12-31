@@ -1,23 +1,20 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react'
+import ItemSection from "./components/itemsSection/ItemSection";
+import OrderSection from "./components/orderSection/OrderSection";
+import './App.css'
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+        <h1 className=" nav bg-light shadow-sm justify-content-center p-3 mb-4 lead font-size-lg">Welcome to Smart Vending Machine</h1>
+        <div className="d-flex flex-row justify-content-around flex-wrap">
+            <div className="item-column">
+              <ItemSection/>
+            </div>
+            <div className="order-column">
+              <OrderSection/>
+            </div>
+        </div>
     </div>
   );
 }
