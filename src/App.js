@@ -8,7 +8,7 @@ function App() {
     <div className="App">
         <h1 className=" nav bg-light shadow-sm justify-content-center p-3 mb-4 lead font-size-lg">Welcome to Smart Vending Machine</h1>
         <div className="d-flex flex-row justify-content-around flex-wrap">
-            <div className="item-column">
+            <div className="item-column border rounded p-4">
               <ItemSection/>
             </div>
             <div className="order-column">

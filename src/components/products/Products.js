@@ -1,12 +1,7 @@
-import React, { useState } from 'react'
+import React from 'react'
 import {Card} from 'react-bootstrap'
-import OrderItem from '../orderItem/OrderItem';
 
 function Products(props) {
-
-  const addToCart=(itemID)=>{
-    //alert(itemID);
-  }
 
   return (
     <>
@@ -22,7 +17,7 @@ function Products(props) {
               <Card.Title>${props.price}</Card.Title>
             </div>
             <div className="pt-2">
-                <button onClick={()=>{addToCart(props.id)}}>+</button>
+                {/* <button onClick={()=>{addToCart(props.id)}}>+</button> */}
             </div>
           </div>
         </Card.Body>

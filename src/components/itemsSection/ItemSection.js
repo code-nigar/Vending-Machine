@@ -7,7 +7,8 @@ function ItemSection() {
   return (
     <>
     <h3>Products:</h3>
-      <div className="d-flex flex-row flex-wrap text-capitalize">
+    <hr />
+      <div className="d-flex flex-row flex-wrap text-capitalize justify-content-center py-3">
         {products.map((cardElement) => {
           return (
             <Products
@@ -20,7 +21,8 @@ function ItemSection() {
         })}
       </div>
       <h3>Packages:</h3>
-      <div className="d-flex flex-row flex-wrap">
+      <hr />
+      <div className="d-flex flex-row flex-wrap justify-content-center py-3">
         {packages.map((cardElement) => {
           return (
             <Packages

@@ -1,6 +1,18 @@
 .item-column{
-    width: 55vw;
+    min-width: 50vw;
+    max-width: 750px;
+    margin-left: 0 15px;
 }
 .order-column{
-    width: 35vw;
+    min-width: 35vw;
+    max-width: 450px;
+    margin-right: 0 15px;
+}
+@media (max-width:800px) {
+    .item-column{
+        width: 85vw;
+    }
+    .order-column{
+        width: 85vw;
+    }
 }
