@@ -3,6 +3,7 @@ import OrderItem from "../orderItem/OrderItem";
 import SuggestedOrder from "../suggestedOrder/SuggestedOrder";
 import { products, packages } from "../../data.mjs";
 import OrderListItem from "../orderListItem/OrderListItem.js";
+import Swal from 'sweetalert2'
 
 function OrderSection() {
 
@@ -198,7 +199,7 @@ function OrderSection() {
       TotalPriceForSuggOfferA += x.price;
     });
     console.log("total = " + TotalPriceForSuggOfferA);
-    //tpso = TotalPriceForSuggOfferA;
+    tpso = TotalPriceForSuggOfferA;
   } else {
     console.log("package A does not fit");
   }
@@ -297,18 +298,37 @@ function OrderSection() {
 
   //compare price of package A with Package 2 and Choosing cost effective one
 
-  if ((TotalPriceForSuggOfferA !==0 || TotalPriceForSuggOfferB !==0) && TotalPriceForSuggOfferA < TotalPriceForSuggOfferB) {
-      mainSugPack = PA;
-  } else {
+  if (TotalPriceForSuggOfferB < TotalPriceForSuggOfferA) {
       mainSugPack = PB;
+  } else {
+      mainSugPack = PA;
   }
   console.log("final result ", mainSugPack);
-  console.log(tpso);
+  console.log("offered price "+ tpso);
+  console.log("actual price "+ tp);
+  console.log(`save $${tp - tpso}`);
 
   if(mainSugPack === undefined){
-    alert("no package to be suggested")
+    //alert("no package to be suggested")
+    Swal.fire({
+      title: 'no package to be suggested',
+      confirmButtonText: 'ok'
+    })
   }else{
-    alert(mainSugPack.toString);
+    // let op=[];
+    // //let op= JSON.stringify(mainSugPack)
+    // for(let i=1; i<mainSugPack.length; i++){
+    //   op.push(`${mainSugPack[i].qtt} ${mainSugPack[i].name} -------- ${mainSugPack[i].price}\n`);
+    // }
+    // JSON.stringify(op);
+    // console.log(op)
+    // //alert(op);
+    // Swal.fire({
+    //   title: 'Suggested Offer',
+    //   text: mainSugPack[0].name +"--------"+ mainSugPack[0].price +",\n"+ op +",\n"+"TOTAL --------------- "+tpso,
+    //   confirmButtonText: 'Choose this Offer',
+    //   footer: `save $${tp-tpso}`
+    // })
   }
 
   };
@@ -328,20 +348,20 @@ function OrderSection() {
           />
         );
       })}
-      <div className="border rounded p-4">
+      <div className="border rounded p-4 text-center">
         <h4>Your Order</h4>
         {makeOrderList()}
         <hr />
       </div>
-      <SuggestedOrder />
-      <OrderListItem />
-      <button
-        onClick={() => {
-          suggestTheOrder(orderList, packages, products, TOTALPRICE);
-        }}
-      >
-        suggest
-      </button>
+      <div className="d-flex flex-row justify-content-center p-3">
+        <button className="btn btn-outline-primary"
+          onClick={() => {
+            suggestTheOrder(orderList, packages, products, TOTALPRICE);
+          }}
+        >
+          Get Cost Effective Suggestion
+        </button>
+      </div>
     </>
     
   );
