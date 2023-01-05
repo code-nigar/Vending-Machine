@@ -5,6 +5,7 @@ import { products, packages } from "../../data.mjs";
 import OrderListItem from "../orderListItem/OrderListItem.js";
 
 function OrderSection() {
+
   var [colaQtty, setColaQtty] = useState(0);
   var [biscuitQtty, setBiscuitQtty] = useState(0);
   var [breadQtty, setBreadQtty] = useState(0);
@@ -61,12 +62,11 @@ function OrderSection() {
 
   useEffect(() => {
     console.log(orderList);
+    //suggestTheOrder(orderList, packages, products, TOTALPRICE);
   }, [orderList]);
 
   let TOTALQTT = eggQtty + biscuitQtty + breadQtty + eggQtty;
   let TOTALPRICE = colaPrice + eggPrice + breadPrice + biscuitPrice;
-  let PKG1count = 0;
-  let PKG2count = 0;
 
   //prepare MEMO of User Order
   const makeOrderList = () => {
@@ -105,215 +105,212 @@ function OrderSection() {
     );
   };
 
-                                                                    //suggested order function
+  //================================================================
+  //suggested order function
+ //===============================================================
+
 
   const suggestTheOrder = (orderList, packages, products, tp) => {
-    var TotalPriceForSuggOfferA = Infinity;
-    var TotalPriceForSuggOfferB = Infinity;
-    console.log("user order ", orderList);
-    let mainSugPack, PA, PB;
+    var tpso =0;
+  var TotalPriceForSuggOfferA = 0;
+  var TotalPriceForSuggOfferB = 0;
+  console.log("user order ", orderList);
+  let mainSugPack, PA, PB;
 
-    //checking whether package A fits for order
+  //checking whether package A fits for order
 
-    if (orderList.cola.quantity >= 2 && orderList.biscuit.quantity >= 1) {
-      let copiedOL = JSON.parse(JSON.stringify(orderList));
-      let sugPackage = [];
-      let remainingItems = [];
+  if (orderList.cola.quantity >= 2 && orderList.biscuit.quantity >= 1) {
+    let copiedOL = JSON.parse(JSON.stringify(orderList));
+    let sugPackage = [];
+    let remainingItems = [];
 
-      sugPackage.push(packages[0]);
-      copiedOL.cola.quantity -= 2;
-      copiedOL.biscuit.quantity -= 1;
-      copiedOL.cola.price -= products[0].price;
-      copiedOL.biscuit.price -= products[1].price;
-      if (copiedOL.cola.quantity > 0) {
-        remainingItems.push(copiedOL.cola);
-      }
-      if (copiedOL.biscuit.quantity > 0) {
-        remainingItems.push(copiedOL.biscuit);
-      }
-      if (copiedOL.bread.quantity > 0) {
-        remainingItems.push(copiedOL.bread);
-      }
-      if (copiedOL.egg.quantity > 0) {
-        remainingItems.push(copiedOL.egg);
-      }
-      console.log("rmt ", remainingItems);
+    sugPackage.push(packages[0]);
+    copiedOL.cola.quantity -= 2;
+    copiedOL.biscuit.quantity -= 1;
+    copiedOL.cola.price -= products[0].price;
+    copiedOL.biscuit.price -= products[1].price;
+    if (copiedOL.cola.quantity > 0) {
+      remainingItems.push(copiedOL.cola);
+    }
+    if (copiedOL.biscuit.quantity > 0) {
+      remainingItems.push(copiedOL.biscuit);
+    }
+    if (copiedOL.bread.quantity > 0) {
+      remainingItems.push(copiedOL.bread);
+    }
+    if (copiedOL.egg.quantity > 0) {
+      remainingItems.push(copiedOL.egg);
+    }
+    console.log("remainigItems ", remainingItems);
 
-      //adding remaining items after selecting package A
-      if (remainingItems) {
-        let ol2 = { cola: {}, biscuit: {}, bread: {}, egg: {} };
-        remainingItems.map((x) => {
-          switch (x.id) {
-            case 1: {
-              ol2.cola = { qtt: x.quantity, name: "cola", price: x.price };
-              break;
-            }
-            case 2: {
-              ol2.biscuit = {
-                qtt: x.quantity,
-                name: "biscuit",
-                price: x.price,
-              };
-              break;
-            }
-            case 3: {
-              ol2.bread = { qtt: x.quantity, name: "bread", price: x.price };
-              break;
-            }
-            case 4: {
-              ol2.egg = { qtt: x.quantity, name: "egg", price: x.price };
-              break;
-            }
+    //adding remaining items after selecting package A
+    if (remainingItems) {
+      let ol2 = { cola: {}, biscuit: {}, bread: {}, egg: {} };
+      remainingItems.map((x) => {
+        switch (x.id) {
+          case 1: {
+            ol2.cola = { qtt: x.quantity, name: "cola", price: x.price };
+            break;
           }
-        });
-
-        if (Object.keys(ol2.cola).length === 0) {
-          delete ol2.cola;
-        } else {
-          sugPackage.push(ol2.cola);
-        }
-
-        if (Object.keys(ol2.biscuit).length === 0) {
-          delete ol2.biscuit;
-        } else {
-          sugPackage.push(ol2.biscuit);
-        }
-
-        if (Object.keys(ol2.bread).length === 0) {
-          delete ol2.bread;
-        } else {
-          sugPackage.push(ol2.bread);
-        }
-
-        if (Object.keys(ol2.egg).length === 0) {
-          delete ol2.egg;
-        } else {
-          sugPackage.push(ol2.egg);
-        }
-      }
-      PA = sugPackage;
-      console.log("suggeted package is ", sugPackage);
-
-      PA.forEach((x) => {
-        TotalPriceForSuggOfferA += x.price;
-      });
-      console.log("total = " + TotalPriceForSuggOfferA);
-    } else {
-      console.log("package A does not fit");
-    }
-
-    ////checking whether package B fits for order
-
-    if (
-      orderList.biscuit.quantity >= 1 &&
-      orderList.bread.quantity >= 1 &&
-      orderList.egg.quantity >= 6
-    ) {
-      let copiedOL = JSON.parse(JSON.stringify(orderList));
-      let sugPackage = [];
-      let remainingItems = [];
-
-      sugPackage.push(packages[1]);
-      copiedOL.biscuit.quantity -= 1;
-      copiedOL.bread.quantity -= 1;
-      copiedOL.egg.quantity -= 6;
-      copiedOL.biscuit.price -= products[1].price;
-      copiedOL.bread.price -= products[2].price;
-      copiedOL.egg.price -= products[3].price;
-      if (copiedOL.cola.quantity > 0) {
-        remainingItems.push(copiedOL.cola);
-      }
-      if (copiedOL.biscuit.quantity > 0) {
-        remainingItems.push(copiedOL.biscuit);
-      }
-      if (copiedOL.bread.quantity > 0) {
-        remainingItems.push(copiedOL.bread);
-      }
-      if (copiedOL.egg.quantity > 0) {
-        remainingItems.push(copiedOL.egg);
-      }
-      console.log("rmt ", remainingItems);
-
-      //adding remaining items after selecting package A
-      if (remainingItems) {
-        let ol2 = { cola: {}, biscuit: {}, bread: {}, egg: {} };
-        remainingItems.map((x) => {
-          switch (x.id) {
-            case 1: {
-              ol2.cola = { qtt: x.quantity, name: "cola", price: x.price };
-              break;
-            }
-            case 2: {
-              ol2.biscuit = {
-                qtt: x.quantity,
-                name: "biscuit",
-                price: x.price,
-              };
-              break;
-            }
-            case 3: {
-              ol2.bread = { qtt: x.quantity, name: "bread", price: x.price };
-              break;
-            }
-            case 4: {
-              ol2.egg = { qtt: x.quantity, name: "egg", price: x.price };
-              break;
-            }
+          case 2: {
+            ol2.biscuit = { qtt: x.quantity, name: "biscuit", price: x.price };
+            break;
           }
-        });
-
-        if (Object.keys(ol2.cola).length === 0) {
-          delete ol2.cola;
-        } else {
-          sugPackage.push(ol2.cola);
+          case 3: {
+            ol2.bread = { qtt: x.quantity, name: "bread", price: x.price };
+            break;
+          }
+          case 4: {
+            ol2.egg = { qtt: x.quantity, name: "egg", price: x.price };
+            break;
+          }
         }
-
-        if (Object.keys(ol2.biscuit).length === 0) {
-          delete ol2.biscuit;
-        } else {
-          sugPackage.push(ol2.biscuit);
-        }
-
-        if (Object.keys(ol2.bread).length === 0) {
-          delete ol2.bread;
-        } else {
-          sugPackage.push(ol2.bread);
-        }
-
-        if (Object.keys(ol2.egg).length === 0) {
-          delete ol2.egg;
-        } else {
-          sugPackage.push(ol2.egg);
-        }
-      }
-      console.log("suggeted package is ", sugPackage);
-
-      PB = sugPackage;
-      PB.forEach((x) => {
-        TotalPriceForSuggOfferB += x.price;
       });
-      console.log("total = " + TotalPriceForSuggOfferB);
-    } else {
-      console.log("package B does not fit");
-    }
 
-    //compare price of package A with Package 2 and Choosing cost effective one
-
-    if (TotalPriceForSuggOfferA < TotalPriceForSuggOfferB) {
-      if (TotalPriceForSuggOfferA < tp) {
-        mainSugPack = PA;
+      if (Object.keys(ol2.cola).length === 0) {
+        delete ol2.cola;
       } else {
-        mainSugPack = "same as original";
+        sugPackage.push(ol2.cola);
       }
-      //mainSugPack = PA;
-    } else {
-      if (TotalPriceForSuggOfferB < tp) {
-        mainSugPack = PB;
+
+      if (Object.keys(ol2.biscuit).length === 0) {
+        delete ol2.biscuit;
       } else {
-        mainSugPack = "same as original";
+        sugPackage.push(ol2.biscuit);
+      }
+
+      if (Object.keys(ol2.bread).length === 0) {
+        delete ol2.bread;
+      } else {
+        sugPackage.push(ol2.bread);
+      }
+
+      if (Object.keys(ol2.egg).length === 0) {
+        delete ol2.egg;
+      } else {
+        sugPackage.push(ol2.egg);
       }
     }
-    console.log("final result ", mainSugPack);
+    PA = sugPackage;
+    console.log("suggeted package is ", sugPackage);
+
+    PA.forEach((x) => {
+      TotalPriceForSuggOfferA += x.price;
+    });
+    console.log("total = " + TotalPriceForSuggOfferA);
+    //tpso = TotalPriceForSuggOfferA;
+  } else {
+    console.log("package A does not fit");
+  }
+
+  ////checking whether package B fits for order
+
+  if (
+    orderList.biscuit.quantity >= 1 &&
+    orderList.bread.quantity >= 1 &&
+    orderList.egg.quantity >= 6
+  ) {
+    let copiedOL = JSON.parse(JSON.stringify(orderList));
+    let sugPackage = [];
+    let remainingItems = [];
+
+    sugPackage.push(packages[1]);
+    copiedOL.biscuit.quantity -= 1;
+    copiedOL.bread.quantity -= 1;
+    copiedOL.egg.quantity -= 6;
+    copiedOL.biscuit.price -= products[1].price;
+    copiedOL.bread.price -= products[2].price;
+    copiedOL.egg.price -= products[3].price;
+    if (copiedOL.cola.quantity > 0) {
+      remainingItems.push(copiedOL.cola);
+    }
+    if (copiedOL.biscuit.quantity > 0) {
+      remainingItems.push(copiedOL.biscuit);
+    }
+    if (copiedOL.bread.quantity > 0) {
+      remainingItems.push(copiedOL.bread);
+    }
+    if (copiedOL.egg.quantity > 0) {
+      remainingItems.push(copiedOL.egg);
+    }
+    console.log("remainigItems ", remainingItems);
+
+    //adding remaining items after selecting package A
+    if (remainingItems) {
+      let ol2 = { cola: {}, biscuit: {}, bread: {}, egg: {} };
+      remainingItems.map((x) => {
+        switch (x.id) {
+          case 1: {
+            ol2.cola = { qtt: x.quantity, name: "cola", price: x.price };
+            break;
+          }
+          case 2: {
+            ol2.biscuit = { qtt: x.quantity, name: "biscuit", price: x.price };
+            break;
+          }
+          case 3: {
+            ol2.bread = { qtt: x.quantity, name: "bread", price: x.price };
+            break;
+          }
+          case 4: {
+            ol2.egg = { qtt: x.quantity, name: "egg", price: x.price };
+            break;
+          }
+        }
+      });
+
+      if (Object.keys(ol2.cola).length === 0) {
+        delete ol2.cola;
+      } else {
+        sugPackage.push(ol2.cola);
+      }
+
+      if (Object.keys(ol2.biscuit).length === 0) {
+        delete ol2.biscuit;
+      } else {
+        sugPackage.push(ol2.biscuit);
+      }
+
+      if (Object.keys(ol2.bread).length === 0) {
+        delete ol2.bread;
+      } else {
+        sugPackage.push(ol2.bread);
+      }
+
+      if (Object.keys(ol2.egg).length === 0) {
+        delete ol2.egg;
+      } else {
+        sugPackage.push(ol2.egg);
+      }
+    }
+    console.log("suggeted package is ", sugPackage);
+
+    PB = sugPackage;
+    PB.forEach((x) => {
+      TotalPriceForSuggOfferB += x.price;
+    });
+    console.log("total = " + TotalPriceForSuggOfferB);
+    tpso = TotalPriceForSuggOfferB;
+  } else {
+    console.log("package B does not fit");
+  }
+
+  //compare price of package A with Package 2 and Choosing cost effective one
+
+  if ((TotalPriceForSuggOfferA !==0 || TotalPriceForSuggOfferB !==0) && TotalPriceForSuggOfferA < TotalPriceForSuggOfferB) {
+      mainSugPack = PA;
+  } else {
+      mainSugPack = PB;
+  }
+  console.log("final result ", mainSugPack);
+  console.log(tpso);
+
+  if(mainSugPack === undefined){
+    alert("no package to be suggested")
+  }else{
+    alert(mainSugPack.toString);
+  }
+
   };
 
   return (
@@ -337,6 +334,7 @@ function OrderSection() {
         <hr />
       </div>
       <SuggestedOrder />
+      <OrderListItem />
       <button
         onClick={() => {
           suggestTheOrder(orderList, packages, products, TOTALPRICE);
@@ -345,7 +343,8 @@ function OrderSection() {
         suggest
       </button>
     </>
+    
   );
 }
 
-export default OrderSection;
+export default OrderSection; 

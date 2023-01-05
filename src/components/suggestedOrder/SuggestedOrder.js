@@ -1,10 +1,11 @@
 import React from 'react'
 
-function SuggestedOrder() {
+function SuggestedOrder(props) {
+
   return (
     <>
+      <div></div>
     </>
   )
 }
-
 export default SuggestedOrder
